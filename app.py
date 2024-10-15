@@ -1,7 +1,11 @@
+import os
+
 from flask import Flask
 from flask import render_template
 
+from dotenv import load_dotenv
 
+load_dotenv()
 app = Flask(__name__)
 
 
@@ -23,7 +27,8 @@ def map():
 
 @app.route("/profile")
 def profile():
-    return render_template("profile.html")
+    liff_id = os.getenv("LIFF_ID")
+    return render_template("profile.html", liff_id=liff_id)
 
 
-app.run(debug=True,host="0.0.0.0")
+app.run(debug=True,host="0.0.0.0", port=5001)
