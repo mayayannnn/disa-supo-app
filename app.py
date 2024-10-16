@@ -1,5 +1,5 @@
 import os
-
+from info import scrape_iwate_bousai
 from flask import Flask
 from flask import render_template
 
@@ -15,7 +15,8 @@ def index():
 
 @app.route("/info")
 def info():
-    return render_template("info.html")
+    iwate_bousai = scrape_iwate_bousai()
+    return render_template("info.html",iwate_bousai=iwate_bousai)
 
 @app.route("/family")
 def family():
@@ -28,10 +29,11 @@ def map():
 @app.route("/profile")
 def profile():
     liff_id = os.getenv("LIFF_ID")
+    
     return render_template("profile.html", liff_id=liff_id)
 
 
 if os.getenv("ENV") == "development":
-    app.run(host="0.0.0.0", port=5001, ssl_context=('ssl/cert.pem', 'ssl/private.key'))
+    app.run(host="0.0.0.0", port=5001, ssl_context=('ssl/cert.pem', 'ssl/private.key'),debug=True)
 else:
     app.run(debug=True,host="0.0.0.0", port=5001)

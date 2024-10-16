@@ -37,7 +37,7 @@ map
     getCurrentPosition();
 
     // 地図の初期表示
-    var map = L.map('map').setView([39.701659, 141.136718], 13); // 東京駅の緯度経度
+    var map = L.map('map').setView([39.741342617756274, 141.14154878158686], 13); // 東京駅の緯度経度
 
     // 地図タイルの設定
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -45,8 +45,12 @@ map
     }).addTo(map);
 
     // マーカーを追加
-    var marker = L.marker([39.701659, 141.136718]).addTo(map)
+    var marker = L.marker([39.741342617756274, 141.14154878158686]).addTo(map)
+        .bindPopup('黒石野中学校')
+        .openPopup();
+    var marker = L.marker([39.70196447156899, 141.13575319162757]).addTo(map)
         .bindPopup('盛岡駅')
         .openPopup();
+    
 </script>
 {% endblock %}
