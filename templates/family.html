@@ -5,5 +5,37 @@ family
 {% endblock %}
 
 {% block top %}
-family
+<div class="container mt-4">
+    <h2>家族の追加</h2>
+    <form action="{{ url_for('add_family') }}" method="POST">
+        <div class="form-group">
+            <label for="line_id">LINE ID:</label>
+            <input type="text" class="form-control" id="line_id" name="line_id" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">家族を追加</button>
+    </form>
+    <h2 class="mt-4">家族一覧</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>名前</th>
+                <th>LINE ID</th>
+                <th>住所</th>
+                <th>誕生日</th>
+                <th>性別</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for family in families %}
+            <tr>
+                <td>{{ family.to_user.name }}</td>
+                <td>{{ family.to_user.line_id }}</td>
+                <td>{{ family.to_user.address }}</td>
+                <td>{{ family.to_user.birthday }}</td>
+                <td>{{ family.to_user.gender }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
