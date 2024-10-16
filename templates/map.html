@@ -17,6 +17,25 @@ map
 
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script>
+    // 現在位置を取得する関数
+    function getCurrentPosition() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    console.log("Latitude: " + position.coords.latitude);
+                    console.log("Longitude: " + position.coords.longitude);
+                },
+                function (error) {
+                    console.log("Error: " + error.message);
+                }
+            );
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+        }
+    }
+    // 関数を呼び出す
+    getCurrentPosition();
+
     // 地図の初期表示
     var map = L.map('map').setView([39.701659, 141.136718], 13); // 東京駅の緯度経度
 
