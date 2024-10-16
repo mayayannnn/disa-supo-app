@@ -31,4 +31,7 @@ def profile():
     return render_template("profile.html", liff_id=liff_id)
 
 
-app.run(debug=True,host="0.0.0.0", port=5001, ssl_context=('ssl/cert.pem', 'ssl/private.key'))
+if os.getenv("ENV") == "development":
+    app.run(host="0.0.0.0", port=5001, ssl_context=('ssl/cert.pem', 'ssl/private.key'))
+else:
+    app.run(debug=True,host="0.0.0.0", port=5001)
