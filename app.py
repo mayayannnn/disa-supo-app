@@ -29,7 +29,7 @@ def map():
 @app.route("/profile")
 def profile():
     liff_id = os.getenv("LIFF_ID")
-    
+    profile = liff_id.getProfile()
     return render_template("profile.html", liff_id=liff_id)
 
 
