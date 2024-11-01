@@ -1,4 +1,7 @@
 import os
+import uuid
+from datetime import datetime
+
 from info import scrape_iwate_bousai
 from flask import Flask
 from flask import render_template
@@ -18,7 +21,7 @@ from database import Pharmacy
 from database import ReliefSuppliesCategory
 from database import ReliefSupplies
 from database import UserPosition
-
+from database import FamilyInvitation
 from init_data import init_shelter_data
 
 load_dotenv()
@@ -26,7 +29,7 @@ load_dotenv()
 app = Flask(__name__)
 
 if os.getenv("DB_INIT") == "init":
-    tables = [User, Family, Shelter, Hospital, Pharmacy, ReliefSuppliesCategory, ReliefSupplies, UserPosition]
+    tables = [User, Family, Shelter, Hospital, Pharmacy, ReliefSuppliesCategory, ReliefSupplies, UserPosition, FamilyInvitation]
     db.drop_tables(tables)
     db.create_tables(tables)
     init_shelter_data()
@@ -59,7 +62,12 @@ def family():
     #     return redirect(url_for('profile'))
     # families = Family.select().where(Family.from_user == user.id)
     families = Family.select().where(Family.from_user == 1)
-    return render_template("family.html", user=user, families=families)
+    family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == 1).first()
+    if not family_invitation:
+        FamilyInvitation.create(invite_user=1, code=uuid.uuid4(), created_at=datetime.now())
+        db.commit()
+        family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == 1).first()
+    return render_template("family.html", user=user, families=families, family_invitation=family_invitation)
 
 @app.route("/family/add", methods=['POST'])
 def add_family():
