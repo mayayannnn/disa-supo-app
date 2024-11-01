@@ -22,8 +22,8 @@ class UserPosition(Model):
 
 
 class Family(Model):
-    family_id = CharField()
-    user = ForeignKeyField(User,backref="family")
+    from_user = ForeignKeyField(User,backref="family")
+    to_user = ForeignKeyField(User,backref="family")
 
     class Meta:
         database = db
