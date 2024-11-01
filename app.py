@@ -71,6 +71,14 @@ def profile():
     liff_id = os.getenv("LIFF_ID")
     return render_template("profile.html",liff_id=liff_id)
 
+@app.route("/profile/save", methods=['POST'])
+def profile_save():
+    print(request.form['lineId'])
+    print(request.form['address'])
+    print(request.form['birthday'])
+    print(request.form['gender'])
+    return redirect("/profile")
+
 @app.route("/shelter/relief_supplies/login")
 def relief_supplies_login():
     return render_template("shelter/relief_supplies/login.html")

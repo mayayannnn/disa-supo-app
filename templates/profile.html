@@ -24,12 +24,14 @@ profile
             console.log(profile);
             document.getElementById("profilePictureUrl").src = profile.pictureUrl;
             document.getElementById("displayName").innerText = "Name: " + profile.displayName;
+            document.getElementById("lineId").value = profile.userId;
         }
     }
     main();
 </script>
 <div class="container mt-4">
-    <form action="/" method="POST">
+    <form action="/profile/save" method="POST">
+        <input type="hidden" name="lineId" id="lineId">
         <div class="mb-3">
             <label for="address" class="form-label">住所</label>
             <input type="text" class="form-control" id="address" name="address" required>
