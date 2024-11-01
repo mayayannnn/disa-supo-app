@@ -6,39 +6,51 @@ profile
 
 {% block top %}
 <div class="container">
-    <h1 class="text-center mt-5">Welcome to LINE LIFF App</h1>
-    <div class="text-center mt-3">
-        <button id="login" class="btn btn-primary">Login</button>
-        <button id="logout" class="btn btn-secondary">Logout</button>
-    </div>
-    <div id="profileInfo" class="text-center mt-3" style="display:none;">
-        <img id="profilePictureUrl" src="" alt="Profile Picture" class="img-thumbnail" width="100">
-        <p id="displayName" class="mt-2"></p>
-    </div>
+    <h3 class="text-center mt-5">Welcome to LINE LIFF App</h3>
+    <p class="text-center">まずはプロフィールを登録してください。</p>
+</div>
+<div id="profileInfo" class="text-center mt-3">
+    <img id="profilePictureUrl" src="" alt="Profile Picture" class="img-thumbnail" width="100">
+    <p id="displayName" class="mt-2"></p>
+</div>
 </div>
 <script>
     async function main() {
         await liff.init({ liffId: "{{ liff_id }}" });
         if (!liff.isLoggedIn()) {
-            document.getElementById("login").style.display = "block";
-            document.getElementById("logout").style.display = "none";
-            document.getElementById("profileInfo").style.display = "none";
+            liff.login();
         } else {
-            document.getElementById("login").style.display = "none";
-            document.getElementById("logout").style.display = "block";
-            document.getElementById("profileInfo").style.display = "block";
             const profile = await liff.getProfile();
+            console.log(profile);
             document.getElementById("profilePictureUrl").src = profile.pictureUrl;
             document.getElementById("displayName").innerText = "Name: " + profile.displayName;
         }
-        document.getElementById("login").addEventListener("click", () => {
-            liff.login();
-        });
-        document.getElementById("logout").addEventListener("click", () => {
-            liff.logout();
-            window.location.reload();
-        });
     }
     main();
 </script>
+<div class="container mt-4">
+    <form action="/" method="POST">
+        <div class="mb-3">
+            <label for="address" class="form-label">住所</label>
+            <input type="text" class="form-control" id="address" name="address" required>
+        </div>
+        <div class="mb-3">
+            <label for="birthday" class="form-label">生年月日</label>
+            <input type="date" class="form-control" id="birthday" name="birthday" required>
+        </div>
+        <div class="mb-3">
+            <label for="gender" class="form-label">性別</label>
+            <select class="form-select" id="gender" name="gender" required>
+                <option value="" selected disabled>選択してください</option>
+                <option value="male">男性</option>
+                <option value="female">女性</option>
+                <option value="other">その他</option>
+            </select>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">登録</button>
+        </div>
+    </form>
+</div>
+
 {% endblock %}
