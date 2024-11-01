@@ -5,13 +5,22 @@ db = SqliteDatabase('disa_supo.db')
 class User(Model):
     line_id = CharField()
     name = CharField()
-    address = CharField()
+
     birthday = DateField()
     gender = CharField()
 
     class Meta:
         database = db
-    
+
+class UserPosition(Model):
+    Latitude = CharField()
+    Longitude = CharField()
+    user =ForeignKeyField(User,backref="user_position")
+
+    class Meta:
+        database = db
+
+
 class Family(Model):
     family_id = CharField()
     user = ForeignKeyField(User,backref="family")
@@ -21,7 +30,8 @@ class Family(Model):
 
 class Shelter(Model):
     name = CharField()
-    address = CharField()
+    Latitude = CharField()
+    Longitude = CharField()
     category = CharField()
     capacity = CharField()
     phone_number = CharField()
@@ -31,7 +41,8 @@ class Shelter(Model):
 
 class Hospital(Model):
     name = CharField()
-    address = CharField()
+    Latitude = CharField()
+    Longitude = CharField()
     category = CharField()
     capacity = CharField()
     phone_number = CharField()
@@ -41,7 +52,8 @@ class Hospital(Model):
 
 class Pharmacy(Model):
     name = CharField()
-    address = CharField()
+    Latitude = CharField()
+    Longitude = CharField()
     capacity = CharField()
     phone_number = CharField()
 
@@ -71,4 +83,4 @@ class Knowledge(Model):
     class Meta:
         database = db
 
-db.create_tables([User,Family])
+db.create_tables([User,Family,Shelter,Hospital,Pharmacy,ReliefSuppliesCateogy,ReliefSupplies])

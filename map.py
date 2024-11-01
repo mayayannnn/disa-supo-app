@@ -17,7 +17,9 @@ title = driver.title
 print(title)
 
 # 特定のクラス名を持つすべての要素を取得
-elements = driver.find_element(By.CSS_SELECTOR, ".css-1gfd10d-shelter-congestion-map-shelters-CShelters")
+elements = []
+
+elements.append(driver.find_element(By.CSS_SELECTOR, ".css-zx7m23-shelter-congestion-map-shelters-CShelters"))
 
 
 if elements:
