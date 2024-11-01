@@ -59,7 +59,7 @@ class Pharmacy(Model):
     class Meta:
         database = db
 
-class ReliefSuppliesCateogy(Model):
+class ReliefSuppliesCategory(Model):
     name = CharField()
 
     class Meta:
@@ -81,5 +81,3 @@ class Knowledge(Model):
 
     class Meta:
         database = db
-
-db.create_tables([User,Family,Shelter,Hospital,Pharmacy,ReliefSuppliesCateogy,ReliefSupplies, UserPosition])

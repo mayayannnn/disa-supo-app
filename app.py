@@ -11,10 +11,24 @@ from dotenv import load_dotenv
 from database import db
 from database import User
 from database import Family
+from database import Shelter
+from database import Hospital
+from database import Pharmacy
+from database import ReliefSuppliesCategory
+from database import ReliefSupplies
+from database import UserPosition
+
+from init_data import init_shelter_data
 
 load_dotenv()
 
 app = Flask(__name__)
+
+if os.getenv("DB_INIT") == "init":
+    tables = [User, Family, Shelter, Hospital, Pharmacy, ReliefSuppliesCategory, ReliefSupplies, UserPosition]
+    db.drop_tables(tables)
+    db.create_tables(tables)
+    init_shelter_data()
 
 
 @app.route("/")
