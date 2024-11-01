@@ -5,6 +5,7 @@ from flask import render_template
 from flask import request
 from flask import redirect
 from flask import url_for
+from flask import session
 
 from dotenv import load_dotenv
 
@@ -30,6 +31,8 @@ if os.getenv("DB_INIT") == "init":
     db.create_tables(tables)
     init_shelter_data()
 
+app.secret_key = os.urandom(24)
+
 
 @app.route("/")
 def index():
@@ -37,17 +40,26 @@ def index():
 
 @app.route("/info")
 def info():
+    # line_id = session.get('line_id')
+    # user = None
+    # if line_id:
+    #     user = User.select().where(User.line_id == line_id).first()
+    # if not user:
+    #     return redirect(url_for('profile'))
     iwate_bousai = scrape_iwate_bousai()
     return render_template("info.html",iwate_bousai=iwate_bousai)
 
-@app.route("/family/<id>")
-def family(id):
-    user = User.select().where(User.id == id).first()
-    print(user)
-    families = []
-    if user:
-        families = Family.select().where(Family.from_user == user.id)
-    return render_template("family.html", families=families)
+@app.route("/family")
+def family():
+    # line_id = session.get('line_id')
+    user = None
+    # if line_id:
+    #     user = User.select().where(User.line_id == line_id).first()
+    # if not user:
+    #     return redirect(url_for('profile'))
+    # families = Family.select().where(Family.from_user == user.id)
+    families = Family.select().where(Family.from_user == 1)
+    return render_template("family.html", user=user, families=families)
 
 @app.route("/family/add", methods=['POST'])
 def add_family():
@@ -64,12 +76,22 @@ def add_family():
 
 @app.route("/map")
 def map():
+    line_id = session.get('line_id')
+    user = None
+    if line_id:
+        user = User.select().where(User.line_id == line_id).first()
+    if not user:
+        return redirect(url_for('profile'))
     return render_template("map.html")
 
 @app.route("/profile")
 def profile():
     liff_id = os.getenv("LIFF_ID")
-    return render_template("profile.html",liff_id=liff_id)
+    line_id = session.get('line_id')
+    user = None
+    if line_id:
+        user = User.select().where(User.line_id == line_id).first()
+    return render_template("profile.html", liff_id=liff_id, user=user)
 
 @app.route("/profile/save", methods=['POST'])
 def profile_save():
@@ -77,6 +99,7 @@ def profile_save():
     print(request.form['address'])
     print(request.form['birthday'])
     print(request.form['gender'])
+    session['line_id'] = request.form['lineId']
     return redirect("/profile")
 
 @app.route("/shelter/relief_supplies/login")

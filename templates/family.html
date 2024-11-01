@@ -5,34 +5,81 @@ family
 {% endblock %}
 
 {% block top %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<style>
+    #map {
+        height: 500px;
+        width: 70%;
+        margin: 0 auto;
+    }
+</style>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    // 現在位置を取得する関数
+    function getCurrentPosition() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    console.log("Latitude: " + position.coords.latitude);
+                    console.log("Longitude: " + position.coords.longitude);
+                },
+                function (error) {
+                    console.log("Error: " + error.message);
+                }
+            );
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+        }
+    }
+    // 関数を呼び出す
+    getCurrentPosition();
+
+    // 地図の初期表示
+    var map = L.map('map').setView([39.741342617756274, 141.14154878158686], 13); // 東京駅の緯度経度
+
+    // 地図タイルの設定
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // マーカーを追加
+    var marker = L.marker([39.741342617756274, 141.14154878158686]).addTo(map)
+        .bindPopup('黒石野中学校')
+        .openPopup();
+</script>
 <div class="container mt-4">
-    <h2>家族の追加</h2>
-    <form action="{{ url_for('add_family') }}" method="POST">
-        <div class="form-group">
-            <label for="line_id">LINE ID:</label>
-            <input type="text" class="form-control" id="line_id" name="line_id" required>
-        </div>
-        <button type="submit" class="btn btn-primary mt-2">家族を追加</button>
-    </form>
-    <h2 class="mt-4">家族一覧</h2>
+    <div class="text-center">
+        <button id="inviteBtn" class="btn btn-primary mb-3">招待リンク</button>
+        <script>
+            document.getElementById('inviteBtn').addEventListener('click', function () {
+                // 現在のURLを取得
+                const currentUrl = window.location.origin + '/invite';
+                // クリップボードにコピー
+                navigator.clipboard.writeText(currentUrl).then(function () {
+                    alert('招待リンクをクリップボードにコピーしました');
+                }).catch(function (err) {
+                    console.error('クリップボードへのコピーに失敗しました', err);
+                    alert('クリップボードへのコピーに失敗しました');
+                });
+            });
+        </script>
+    </div>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>名前</th>
-                <th>LINE ID</th>
-                <th>住所</th>
-                <th>誕生日</th>
-                <th>性別</th>
+                <th>-</th>
             </tr>
         </thead>
         <tbody>
             {% for family in families %}
             <tr>
                 <td>{{ family.to_user.name }}</td>
-                <td>{{ family.to_user.line_id }}</td>
-                <td>{{ family.to_user.address }}</td>
-                <td>{{ family.to_user.birthday }}</td>
-                <td>{{ family.to_user.gender }}</td>
+                <td>
+                    <button class="btn btn-danger">削除</button>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
