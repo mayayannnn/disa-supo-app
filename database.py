@@ -5,7 +5,6 @@ db = SqliteDatabase('disa_supo.db')
 class User(Model):
     line_id = CharField()
     name = CharField()
-
     birthday = DateField()
     gender = CharField()
 
@@ -83,4 +82,4 @@ class Knowledge(Model):
     class Meta:
         database = db
 
-db.create_tables([User,Family,Shelter,Hospital,Pharmacy,ReliefSuppliesCateogy,ReliefSupplies])
+db.create_tables([User,Family,Shelter,Hospital,Pharmacy,ReliefSuppliesCateogy,ReliefSupplies, UserPosition])
