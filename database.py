@@ -5,6 +5,7 @@ db = SqliteDatabase('disa_supo.db')
 class User(Model):
     line_id = CharField()
     name = CharField()
+    address = CharField()
     birthday = DateField()
     gender = CharField()
 

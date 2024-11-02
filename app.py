@@ -73,10 +73,12 @@ def profile():
 
 @app.route("/profile/save", methods=['POST'])
 def profile_save():
-    print(request.form['lineId'])
-    print(request.form['address'])
-    print(request.form['birthday'])
-    print(request.form['gender'])
+    line_id = request.form['lineId']
+    name    = request.form["name"]
+    address  = request.form['address']
+    birthday = request.form['birthday']
+    gender = request.form['gender']
+    User.create(line_id = line_id,name=name,address=address,birthday=birthday,gender=gender)
     return redirect("/profile")
 
 @app.route("/shelter/relief_supplies/login")

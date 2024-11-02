@@ -24,6 +24,7 @@ profile
             console.log(profile);
             document.getElementById("profilePictureUrl").src = profile.pictureUrl;
             document.getElementById("displayName").innerText = "Name: " + profile.displayName;
+            document.getElementById("name").value = profile.displayName
             document.getElementById("lineId").value = profile.userId;
         }
     }
@@ -32,6 +33,7 @@ profile
 <div class="container mt-4">
     <form action="/profile/save" method="POST">
         <input type="hidden" name="lineId" id="lineId">
+        <input type="hidden" name="name" id="name">
         <div class="mb-3">
             <label for="address" class="form-label">住所</label>
             <input type="text" class="form-control" id="address" name="address" required>
