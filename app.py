@@ -67,7 +67,34 @@ def family():
         FamilyInvitation.create(invite_user=1, code=uuid.uuid4(), created_at=datetime.now())
         db.commit()
         family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == 1).first()
+    # 有効期限チェック - 作成から24時間経過している場合は再作成
+    elif (datetime.now() - family_invitation.created_at).total_seconds() > 24 * 60 * 60:
+        family_invitation.delete_instance()
+        FamilyInvitation.create(invite_user=1, code=uuid.uuid4(), created_at=datetime.now())
+        db.commit()
+        family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == 1).first()
     return render_template("family.html", user=user, families=families, family_invitation=family_invitation)
+
+@app.route("/invite/<code>")
+def invite(code):
+    line_id = session.get('line_id')
+    family_invitation = FamilyInvitation.select().where(FamilyInvitation.code == code).first()
+    # 有効期限チェック - 作成から24時間経過している場合は無効
+    if family_invitation and (datetime.now() - family_invitation.created_at).total_seconds() > 24 * 60 * 60:
+        # 招待した人のユーザー情報を取得
+        invite_user = family_invitation.invite_user
+        from_user = User.get(User.id == invite_user)        
+        # 招待された人のユーザー情報を取得 (現在は仮のユーザーID=1を使用)
+        to_user = User.get(User.line_id == line_id)
+        # 家族として登録
+        Family.create(from_user=from_user, to_user=to_user)
+        return redirect("/family")
+    else:
+        return redirect("/invalid_invite")
+
+@app.route("/invalid-invite")
+def invalid_invite():
+    return render_template("invalid_invite.html")
 
 @app.route("/family/add", methods=['POST'])
 def add_family():
