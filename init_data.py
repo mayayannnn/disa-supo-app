@@ -1,7 +1,8 @@
 from database import db
 from database import User
-
 from database import Shelter
+from database import Hospital
+from database import Pharmacy
 
 def init_shelter_data():
     shelters = [
@@ -64,7 +65,7 @@ def init_hospital_data():
 
     # データベースに登録
     for hospital in hospitals:
-        Shelter.create(**hospital)
+        Hospital.create(**hospital)
 
 
 
@@ -98,4 +99,4 @@ def init_pharmacy_data():
 
     # データベースに登録
     for pharmacy in pharmacys:
-        Shelter.create(**pharmacy)
+        Pharmacy.create(**pharmacy)
