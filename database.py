@@ -22,12 +22,20 @@ class UserPosition(Model):
 
 
 class Family(Model):
-    from_user = ForeignKeyField(User,backref="family")
-    to_user = ForeignKeyField(User,backref="family")
+    from_user = ForeignKeyField(User ,backref="family")
+    to_user = ForeignKeyField(User, backref="family")
 
     class Meta:
         database = db
 
+class FamilyInvitation(Model):
+    invite_user = ForeignKeyField(User, backref="family_invitation")
+    code = CharField()
+    created_at = DateTimeField()
+
+    class Meta:
+        database = db
+        
 class Shelter(Model):
     name = CharField()
     Latitude = CharField()

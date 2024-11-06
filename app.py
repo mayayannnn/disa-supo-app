@@ -1,10 +1,14 @@
 import os
+import uuid
+from datetime import datetime
+
 from info import scrape_iwate_bousai
 from flask import Flask
 from flask import render_template
 from flask import request
 from flask import redirect
 from flask import url_for
+from flask import session
 
 from dotenv import load_dotenv
 
@@ -17,7 +21,7 @@ from database import Pharmacy
 from database import ReliefSuppliesCategory
 from database import ReliefSupplies
 from database import UserPosition
-
+from database import FamilyInvitation
 from init_data import init_shelter_data
 
 load_dotenv()
@@ -25,10 +29,12 @@ load_dotenv()
 app = Flask(__name__)
 
 if os.getenv("DB_INIT") == "init":
-    tables = [User, Family, Shelter, Hospital, Pharmacy, ReliefSuppliesCategory, ReliefSupplies, UserPosition]
+    tables = [User, Family, Shelter, Hospital, Pharmacy, ReliefSuppliesCategory, ReliefSupplies, UserPosition, FamilyInvitation]
     db.drop_tables(tables)
     db.create_tables(tables)
     init_shelter_data()
+
+app.secret_key = os.urandom(24)
 
 
 @app.route("/")
@@ -37,17 +43,58 @@ def index():
 
 @app.route("/info")
 def info():
+    # line_id = session.get('line_id')
+    # user = None
+    # if line_id:
+    #     user = User.select().where(User.line_id == line_id).first()
+    # if not user:
+    #     return redirect(url_for('profile'))
     iwate_bousai = scrape_iwate_bousai()
     return render_template("info.html",iwate_bousai=iwate_bousai)
 
-@app.route("/family/<id>")
-def family(id):
-    user = User.select().where(User.id == id).first()
-    print(user)
-    families = []
-    if user:
-        families = Family.select().where(Family.from_user == user.id)
-    return render_template("family.html", families=families)
+@app.route("/family")
+def family():
+    # line_id = session.get('line_id')
+    user = None
+    # if line_id:
+    #     user = User.select().where(User.line_id == line_id).first()
+    # if not user:
+    #     return redirect(url_for('profile'))
+    # families = Family.select().where(Family.from_user == user.id)
+    families = Family.select().where(Family.from_user == 1)
+    family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == 1).first()
+    if not family_invitation:
+        FamilyInvitation.create(invite_user=1, code=uuid.uuid4(), created_at=datetime.now())
+        db.commit()
+        family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == 1).first()
+    # 有効期限チェック - 作成から24時間経過している場合は再作成
+    elif (datetime.now() - family_invitation.created_at).total_seconds() > 24 * 60 * 60:
+        family_invitation.delete_instance()
+        FamilyInvitation.create(invite_user=1, code=uuid.uuid4(), created_at=datetime.now())
+        db.commit()
+        family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == 1).first()
+    return render_template("family.html", user=user, families=families, family_invitation=family_invitation)
+
+@app.route("/invite/<code>")
+def invite(code):
+    line_id = session.get('line_id')
+    family_invitation = FamilyInvitation.select().where(FamilyInvitation.code == code).first()
+    # 有効期限チェック - 作成から24時間経過している場合は無効
+    if family_invitation and (datetime.now() - family_invitation.created_at).total_seconds() > 24 * 60 * 60:
+        # 招待した人のユーザー情報を取得
+        invite_user = family_invitation.invite_user
+        from_user = User.get(User.id == invite_user)        
+        # 招待された人のユーザー情報を取得 (現在は仮のユーザーID=1を使用)
+        to_user = User.get(User.line_id == line_id)
+        # 家族として登録
+        Family.create(from_user=from_user, to_user=to_user)
+        return redirect("/family")
+    else:
+        return redirect("/invalid_invite")
+
+@app.route("/invalid-invite")
+def invalid_invite():
+    return render_template("invalid_invite.html")
 
 @app.route("/family/add", methods=['POST'])
 def add_family():
@@ -64,12 +111,22 @@ def add_family():
 
 @app.route("/map")
 def map():
+    line_id = session.get('line_id')
+    user = None
+    if line_id:
+        user = User.select().where(User.line_id == line_id).first()
+    if not user:
+        return redirect(url_for('profile'))
     return render_template("map.html")
 
 @app.route("/profile")
 def profile():
     liff_id = os.getenv("LIFF_ID")
-    return render_template("profile.html",liff_id=liff_id)
+    line_id = session.get('line_id')
+    user = None
+    if line_id:
+        user = User.select().where(User.line_id == line_id).first()
+    return render_template("profile.html", liff_id=liff_id, user=user)
 
 @app.route("/profile/save", methods=['POST'])
 def profile_save():
