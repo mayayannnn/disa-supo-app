@@ -117,7 +117,10 @@ def map():
         user = User.select().where(User.line_id == line_id).first()
     if not user:
         return redirect(url_for('profile'))
-    return render_template("map.html")
+    shelters = Shelter.select()
+    hospitals = Hospital.select()
+    pharmacys = Pharmacy.select()
+    return render_template("map.html",shelters=shelters,hospitals=hospitals,pharmacys=pharmacys)
 
 @app.route("/profile")
 def profile():

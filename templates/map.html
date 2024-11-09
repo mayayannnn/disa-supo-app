@@ -129,8 +129,17 @@ map
     var marker = L.marker([39.71339178176998, 141.09151326653884]).addTo(map)
         .bindPopup('土淵小・中学校')
         .openPopup();
-    
-        
-    
+
 </script>
+{% for hospital in hospitals() %}
+
+<script>
+        var marker = L.marker(["{{ hospital.Latitude }}","{{ hospital.Longitude }}"]).addTo(map)
+        .bindPopup('{{ hospital.name }}')
+        .openPopup();
+
+</script>
+
+{% endfor %}
+
 {% endblock %}
