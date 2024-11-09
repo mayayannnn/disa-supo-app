@@ -35,6 +35,7 @@ if os.getenv("DB_INIT") == "init":
     init_shelter_data()
 
 app.secret_key = os.urandom(24)
+app.config["SESSION_COOKIE_HTTPONLY"] = True
 
 
 @app.route("/")
@@ -136,6 +137,7 @@ def profile_save():
     birthday = request.form['birthday']
     gender = request.form['gender']
     User.create(line_id = line_id,name=name,address=address,birthday=birthday,gender=gender)
+    session['line_id'] = line_id
     return redirect("/profile")
 
 @app.route("/shelter/relief_supplies/login")
