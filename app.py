@@ -44,24 +44,24 @@ def index():
 
 @app.route("/info")
 def info():
-    # line_id = session.get('line_id')
-    # user = None
-    # if line_id:
-    #     user = User.select().where(User.line_id == line_id).first()
-    # if not user:
-    #     return redirect(url_for('profile'))
+    line_id = session.get('line_id')
+    user = None
+    if line_id:
+        user = User.select().where(User.line_id == line_id).first()
+    if not user:
+        return redirect(url_for('profile'))
     iwate_bousai = scrape_iwate_bousai()
     return render_template("info.html",iwate_bousai=iwate_bousai)
 
 @app.route("/family")
 def family():
-    # line_id = session.get('line_id')
+    line_id = session.get('line_id')
     user = None
-    # if line_id:
-    #     user = User.select().where(User.line_id == line_id).first()
-    # if not user:
-    #     return redirect(url_for('profile'))
-    # families = Family.select().where(Family.from_user == user.id)
+    if line_id:
+        user = User.select().where(User.line_id == line_id).first()
+    if not user:
+        return redirect(url_for('profile'))
+    families = Family.select().where(Family.from_user == user.id)
     families = Family.select().where(Family.from_user == 1)
     family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == 1).first()
     if not family_invitation:
