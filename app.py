@@ -120,8 +120,8 @@ def map():
         return redirect(url_for('profile'))
     shelters = Shelter.select()
     hospitals = Hospital.select()
-    pharmacys = Pharmacy.select()
-    return render_template("map.html",shelters=shelters,hospitals=hospitals,pharmacys=pharmacys)
+    pharmacies = Pharmacy.select()
+    return render_template("map.html",shelters=shelters,hospitals=hospitals,pharmacies=pharmacies)
 
 @app.route("/profile")
 def profile():
