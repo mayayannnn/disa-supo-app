@@ -153,6 +153,10 @@ def relief_supplies_login():
 def relief_supplies_top():
     return render_template("shelter/relief_supplies/top.html")
 
+@app.route("/qa")
+def qa():
+    return render_template("qa.html")
+
 if os.getenv("ENV") == "development":
     app.run(host="0.0.0.0", port=5001, ssl_context=('ssl/cert.pem', 'ssl/private.key'),debug=True)
 else:

@@ -70,7 +70,7 @@ def init_hospital_data():
 
 
 def init_pharmacy_data():
-    pharmacys = [
+    pharmacies = [
         {
             'name': 'かえで薬局',
             'Latitude': '39.736019243138124',
@@ -98,5 +98,5 @@ def init_pharmacy_data():
     ]
 
     # データベースに登録
-    for pharmacy in pharmacys:
+    for pharmacy in pharmacies:
         Pharmacy.create(**pharmacy)
