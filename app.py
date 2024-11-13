@@ -123,7 +123,12 @@ def map():
     shelters = Shelter.select()
     hospitals = Hospital.select()
     pharmacies = Pharmacy.select()
-    return render_template("map.html",shelters=shelters,hospitals=hospitals,pharmacies=pharmacies)
+    return render_template(
+        "map.html",
+        shelters=shelters,
+        hospitals=hospitals,
+        pharmacies=pharmacies
+    )
 
 @app.route("/profile")
 def profile():
