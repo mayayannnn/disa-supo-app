@@ -56,6 +56,40 @@ map
         var marker = L.marker([{{ shelter.Latitude }}, {{ shelter.Longitude }}]).addTo(map)
             .bindPopup('{{ shelter.name }}')
             .openPopup();
+        marker.setIcon(L.icon({
+            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
+            shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        }));
+        {% endfor %}
+        {% for hospital in hospitals %}
+        var marker = L.marker([{{ hospital.Latitude }}, {{ hospital.Longitude }}]).addTo(map)
+            .bindPopup('{{ hospital.name }}')
+            .openPopup();
+        marker.setIcon(L.icon({
+            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+            shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        }));
+        {% endfor %}
+        {% for pharmacy in pharmacies %}
+        var marker = L.marker([{{ pharmacy.Latitude }}, {{ pharmacy.Longitude }}]).addTo(map)
+            .bindPopup('{{ pharmacy.name }}')
+            .openPopup();
+        marker.setIcon(L.icon({
+            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
+            shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        }));
         {% endfor %}
 
     });
@@ -146,17 +180,5 @@ map
     //     .bindPopup('土淵小・中学校')
     //     .openPopup();
 </script>
-
-
-{% for hospital in hospitas: %}
-
-<script>
-        var marker = L.marker(["{{ hospital.Latitude }}","{{ hospital.Longitude }}"]).addTo(map)
-        .bindPopup('{{ hospital.name }}')
-        .openPopup();   
-
-</script>
-
-{% endfor %}
 
 {% endblock %}
