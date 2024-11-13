@@ -22,7 +22,7 @@ from database import ReliefSuppliesCategory
 from database import ReliefSupplies
 from database import UserPosition
 from database import FamilyInvitation
-from init_data import init_shelter_data
+from init_data import *
 
 load_dotenv()
 
@@ -33,6 +33,8 @@ if os.getenv("DB_INIT") == "init":
     db.drop_tables(tables)
     db.create_tables(tables)
     init_shelter_data()
+    init_hospital_data()
+    init_pharmacy_data()
 
 app.secret_key = os.urandom(24)
 app.config["SESSION_COOKIE_HTTPONLY"] = True
