@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Q&A
+{% endblock %}
+
+{% block top %}
+<p>
+    <div class="position-absolute top-50 start-50 translate-middle">
+        <h1>よくある質問    </h1>
+
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+            あいうえお
+          </button>
+        </p>
+        <div style="min-height: 100px;">
+          <div class="collapse collapse-horizontal" id="collapseWidthExample">
+            <div class="card card-body" style="width: 300px;">
+                This is "Test"
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+            あいうえお
+          </button>
+        </p>
+        <div style="min-height: 100px;">
+          <div class="collapse collapse-horizontal" id="collapseWidthExample">
+            <div class="card card-body" style="width: 300px;">
+                This is "Test"
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+{% endblock %}
