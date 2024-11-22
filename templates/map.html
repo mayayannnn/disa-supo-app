@@ -15,10 +15,9 @@ map
 </style>
 <div id="map"></div>
 <p>盛岡駅との距離</p>
-<list id="distance">
+<ul id="distances">
 
-
-</list>
+</ul>
 
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script>
@@ -55,14 +54,21 @@ map
         {% for shelter in shelters %}
         distance = Math.sqrt(({{shelter.Latitude}} - moriokaLatitude) ** 2 + ({{shelter.Longitude}} - moriokaLongitude) ** 2);
         console.log(distance);
-        distances.push(distances.innerHTML = distance.toFixed(2) + "km")
+        // 避難所名と距離を配列に保存
+        distances.push({
+            name: "{{shelter.name}}",
+            distance: distance
+        });
         {% endfor %}
-
-        var list = document.createElement("list");
-        list.textContent = distances;
-        //document内のbody要素の中にpタグを挿入する
-        document.body.appendChild(list);
-
+        // forループの最後で距離順にソートして表示
+        if (distances.length === {{ shelters | length }}) {
+            distances.sort((a, b) => a.distance - b.distance);
+            distances.forEach(shelter => {
+                var li = document.createElement("li");
+                li.textContent = shelter.name + ": " + shelter.distance.toFixed(2) + "km";
+                document.getElementById("distances").appendChild(li);
+            });
+        }
 
         // 地図の初期表示
         var map = L.map('map').setView([myPosition[0], myPosition[1]], 13);
