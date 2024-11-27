@@ -14,9 +14,14 @@ map
     }
 </style>
 <div id="map"></div>
-<p>盛岡駅との距離</p>
+避難所一覧
 <ul id="distances">
-
+</ul>
+病院一覧
+<ul id="hospital_distances">
+</ul>
+薬局一覧
+<ul id="pharmacy_distances">
 </ul>
 
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -65,8 +70,49 @@ map
             distances.sort((a, b) => a.distance - b.distance);
             distances.forEach(shelter => {
                 var li = document.createElement("li");
-                li.textContent = shelter.name + ": " + shelter.distance.toFixed(2) + "km";
+                li.textContent = shelter.name + ": " + shelter.distance * 110 + "km";
                 document.getElementById("distances").appendChild(li);
+            });
+        }
+
+        var hospital_distances = []
+        {% for hospital in hospitals %}
+        distance = Math.sqrt(({{hospital.Latitude}} - moriokaLatitude) ** 2 + ({{hospital.Longitude}} - moriokaLongitude) ** 2);
+        console.log(distance);
+        // 避難所名と距離を配列に保存
+        hospital_distances.push({
+            name: "{{hospital.name}}",
+            distance: distance
+        });
+        {% endfor %}
+        // forループの最後で距離順にソートして表示
+        if (hospital_distances.length === {{ hospitals | length }}) {
+            hospital_distances.sort((a, b) => a.distance - b.distance);
+            hospital_distances.forEach(shelter => {
+                var li = document.createElement("li");
+                li.textContent = shelter.name + ": " + shelter.distance * 110 + "km";
+                document.getElementById("hospital_distances").appendChild(li);
+            });
+        }
+
+
+        var pharmacy_distances = []
+        {% for pharmacy in pharmacies %}
+        distance = Math.sqrt(({{pharmacy.Latitude}} - moriokaLatitude) ** 2 + ({{pharmacy.Longitude}} - moriokaLongitude) ** 2);
+        console.log(distance);
+        // 避難所名と距離を配列に保存
+        pharmacy_distances.push({
+            name: "{{pharmacy.name}}",
+            distance: distance
+        });
+        {% endfor %}
+        // forループの最後で距離順にソートして表示
+        if (pharmacy_distances.length === {{ pharmacies | length }}) {
+            pharmacy_distances.sort((a, b) => a.distance - b.distance);
+            pharmacy_distances.forEach(shelter => {
+                var li = document.createElement("li");
+                li.textContent = shelter.name + ": " + shelter.distance * 110 + "km";
+                document.getElementById("pharmacy_distances").appendChild(li);
             });
         }
 
@@ -77,6 +123,18 @@ map
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
+
+        var marker = L.marker([ myPosition[0] , myPosition[1] ]).addTo(map)
+            .bindPopup("現在地")
+            .openPopup();
+        marker.setIcon(L.icon({
+            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png",
+            shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        }));
 
         // 避難所のマーカーを追加
         {% for shelter in shelters %}

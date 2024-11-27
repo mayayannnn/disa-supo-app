@@ -141,13 +141,24 @@ def profile():
 
 @app.route("/profile/save", methods=['POST'])
 def profile_save():
+    liff_id = os.getenv("LIFF_ID")
+    line_id = session.get('line_id')
+    user = User.select().where(User.line_id == line_id).first()
     line_id = request.form['lineId']
     name    = request.form["name"]
     address  = request.form['address']
     birthday = request.form['birthday']
     gender = request.form['gender']
-    User.create(line_id = line_id,name=name,address=address,birthday=birthday,gender=gender)
-    session['line_id'] = line_id
+    if user == None:
+        User.create(line_id = line_id,name=name,address=address,birthday=birthday,gender=gender)
+        session['line_id'] = line_id
+    else:
+        user.line_id  = line_id
+        user.name     = name
+        user.address  = address
+        user.birthday = birthday
+        user.gender   = gender
+        user.save()
     return redirect("/profile")
 
 @app.route("/shelter/relief_supplies/login")

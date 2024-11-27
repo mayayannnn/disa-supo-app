@@ -30,6 +30,36 @@ profile
     }
     main();
 </script>
+
+
+{% if user != NONE: %}
+<div class="container mt-4">
+    <form action="/profile/save" method="POST">
+        <input type="hidden" name="lineId" id="lineId">
+        <input type="hidden" name="name" id="name">
+        <div class="mb-3">
+            <label for="address" class="form-label">住所</label>
+            <input type="text" class="form-control" id="address" value="{{user.address}}" name="address" required>
+        </div>
+        <div class="mb-3">
+            <label for="birthday" class="form-label">生年月日</label>
+            <input type="date" class="form-control" id="birthday"   value="{{user.birthday}}" name="birthday" required>
+        </div>
+        <div class="mb-3">
+            <label for="gender" class="form-label">性別</label>
+            <select class="form-select" id="gender" name="gender" required >
+                <option value="" selected disabled>選択してください</option>
+                <option {% if user.gender == "male" %} selected {% endif %} value="male"  >男性</option>
+                <option {% if user.gender == "female" %} selected {% endif %} value="female" >女性</option>
+                <option {% if user.gender == "other" %} selected {% endif %} value="other">その他</option>
+            </select>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">登録</button>
+        </div>
+    </form>
+</div>
+{% else %}
 <div class="container mt-4">
     <form action="/profile/save" method="POST">
         <input type="hidden" name="lineId" id="lineId">
@@ -56,5 +86,5 @@ profile
         </div>
     </form>
 </div>
-
+{% endif %}
 {% endblock %}
