@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}
+shelter_list
+{% endblock %}
+
+{% block top %}
+<h1>物資検索</h1>
+<form action="/shelter_list">
+    <input type="search" name="search" id="search">
+    <input type="submit" value="検索">
+</form>
+
+<ul>
+{% for shelter in shelters %}
+<li>{{ shelter.name }}</li>
+{% endfor %}
+</ul>
+{% endblock %}

@@ -130,6 +130,24 @@ def map():
         pharmacies=pharmacies
     )
 
+@app.route("/shelter_list")
+def shelter_list():
+    search = request.args.get("search")
+    if search:
+        searchs = ReliefSuppliesCategory.select().where(ReliefSuppliesCategory.name.contains(search))
+        reliefsupplies = []
+        for search in searchs:
+            reliefsuppli = ReliefSupplies.select().where(ReliefSupplies.reliefsuppliescateogy_id == search.id)
+            reliefsupplies.extend(reliefsuppli)  # ここでリストをフラットにする
+        shelters = []
+        for reliefsuppli in reliefsupplies:
+            shelter = Shelter.select().where(Shelter.id == reliefsuppli.shelter_id).first()
+            shelters.append(shelter)
+        return render_template("shelter_list.html", shelters=shelters)
+    else:
+        return render_template("shelter_list.html")
+
+
 @app.route("/profile")
 def profile():
     liff_id = os.getenv("LIFF_ID")
