@@ -12,24 +12,33 @@ shelter_list
 </form>
 
 <h2>物資の情報</h2>
-{% if not shelters: %}
+{% if not relief_supplies: %}
 <p>結果はありません</p>
 {% else %}
 <ul class="list-group">
-{% for shelter in shelters %}
-<li class="list-group-item">{{ shelter.name }}</li>
-{% endfor %}
-</ul>
-{% endif %}
 
-<h2>名前の情報</h2>
-{% if not shelter_names: %}
-<p>結果はありません</p>
-{% else %}
-<ul class="list-group">
-    {% for shelter_name in shelter_names %}
-    <li class="list-group-item">{{ shelter_name.name }}</li>
-    {% endfor %}
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">名前</th>
+            <th scope="col">物資名</th>
+            <th scope="col">全体の数</th>
+            <th scope="col">あまりの数</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+    {% for relief_suppliy in relief_supplies %}
+    <tr>
+      <th scope="row">{{ relief_suppliy.shelter.name }}</th>
+      <td>{{ relief_suppliy.reliefsuppliescategory.name }}</td>
+      <td>{{ relief_suppliy.required_number }}</td>
+      <td>{{ relief_suppliy.required_number - relief_suppliy.used_number }}</td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
 </ul>
 {% endif %}
 

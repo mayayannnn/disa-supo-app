@@ -30,11 +30,11 @@ app = Flask(__name__)
 
 if os.getenv("DB_INIT") == "init":
     tables = [User, Family, Shelter, Hospital, Pharmacy, ReliefSuppliesCategory, ReliefSupplies, UserPosition, FamilyInvitation]
-    db.drop_tables(tables)
-    db.create_tables(tables)
-    init_shelter_data()
-    init_hospital_data()
-    init_pharmacy_data()
+    # db.drop_tables(tables)
+    # db.create_tables(tables)
+    # init_shelter_data()
+    # init_hospital_data()
+    # init_pharmacy_data()
 
 app.secret_key = os.urandom(24)
 app.config["SESSION_COOKIE_HTTPONLY"] = True
@@ -135,20 +135,10 @@ def shelter_list():
     search = request.args.get("search")
     if search:
         # searchs = ReliefSuppliesCategory.select().where(ReliefSuppliesCategory.name.contains(search))
-        shelters = ReliefSupplies.select(Shelter.name).join(ReliefSuppliesCategory).switch(ReliefSupplies).join(Shelter).where(Shelter.name.contains(search))
-        for i in shelters:
-            print(i)
-        # reliefsupplies = []
-        # for search in searchs:
-        #     reliefsuppli = ReliefSupplies.select().where(ReliefSupplies.reliefsuppliescateogy_id == search.id)
-        #     for i in reliefsuppli:
-        #         reliefsupplies.append(i)
-        # shelters = []
-        # for reliefsuppli in reliefsupplies:
-        #     shelter = Shelter.select().where(Shelter.id == reliefsuppli.shelter_id).first()
-        #     shelters.append(shelter)
-        shelter_names  = Shelter.select().where(Shelter.name.contains(search))
-        return render_template("shelter_list.html", shelters=shelters,shelter_names=shelter_names)
+        relief_supplies = ReliefSupplies.select().join(ReliefSuppliesCategory).switch(ReliefSupplies).join(Shelter).where(
+            Shelter.name.contains(search) | ReliefSuppliesCategory.name.contains(search)
+        )
+        return render_template("shelter_list.html", relief_supplies=relief_supplies)
     else:
         return render_template("shelter_list.html")
 

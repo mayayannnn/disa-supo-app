@@ -76,7 +76,7 @@ class ReliefSuppliesCategory(Model):
 
 class ReliefSupplies(Model):
     shelter = ForeignKeyField(Shelter,backref="reliefsupplies")
-    reliefsuppliescategoy = ForeignKeyField(ReliefSuppliesCategory,backref="reliefsuppliescategory")
+    reliefsuppliescategory = ForeignKeyField(ReliefSuppliesCategory,backref="reliefsupplies")
     required_number = IntegerField()
     used_number = IntegerField()
 
