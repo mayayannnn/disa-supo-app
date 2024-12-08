@@ -11,9 +11,26 @@ shelter_list
     <input type="submit" value="検索">
 </form>
 
-<ul>
+<h2>物資の情報</h2>
+{% if not shelters: %}
+<p>結果はありません</p>
+{% else %}
+<ul class="list-group">
 {% for shelter in shelters %}
-<li>{{ shelter.name }}</li>
+<li class="list-group-item">{{ shelter.name }}</li>
 {% endfor %}
 </ul>
+{% endif %}
+
+<h2>名前の情報</h2>
+{% if not shelter_names: %}
+<p>結果はありません</p>
+{% else %}
+<ul class="list-group">
+    {% for shelter_name in shelter_names %}
+    <li class="list-group-item">{{ shelter_name.name }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 {% endblock %}

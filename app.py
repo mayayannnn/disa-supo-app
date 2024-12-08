@@ -134,16 +134,21 @@ def map():
 def shelter_list():
     search = request.args.get("search")
     if search:
-        searchs = ReliefSuppliesCategory.select().where(ReliefSuppliesCategory.name.contains(search))
-        reliefsupplies = []
-        for search in searchs:
-            reliefsuppli = ReliefSupplies.select().where(ReliefSupplies.reliefsuppliescateogy_id == search.id)
-            reliefsupplies.extend(reliefsuppli)  # ここでリストをフラットにする
-        shelters = []
-        for reliefsuppli in reliefsupplies:
-            shelter = Shelter.select().where(Shelter.id == reliefsuppli.shelter_id).first()
-            shelters.append(shelter)
-        return render_template("shelter_list.html", shelters=shelters)
+        # searchs = ReliefSuppliesCategory.select().where(ReliefSuppliesCategory.name.contains(search))
+        shelters = ReliefSupplies.select(Shelter.name).join(ReliefSuppliesCategory).switch(ReliefSupplies).join(Shelter).where(Shelter.name.contains(search))
+        for i in shelters:
+            print(i)
+        # reliefsupplies = []
+        # for search in searchs:
+        #     reliefsuppli = ReliefSupplies.select().where(ReliefSupplies.reliefsuppliescateogy_id == search.id)
+        #     for i in reliefsuppli:
+        #         reliefsupplies.append(i)
+        # shelters = []
+        # for reliefsuppli in reliefsupplies:
+        #     shelter = Shelter.select().where(Shelter.id == reliefsuppli.shelter_id).first()
+        #     shelters.append(shelter)
+        shelter_names  = Shelter.select().where(Shelter.name.contains(search))
+        return render_template("shelter_list.html", shelters=shelters,shelter_names=shelter_names)
     else:
         return render_template("shelter_list.html")
 
