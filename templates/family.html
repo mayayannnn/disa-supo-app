@@ -55,7 +55,7 @@ family
         <script>
             document.getElementById('inviteBtn').addEventListener('click', function () {
                 // 現在のURLを取得
-                const currentUrl = window.location.origin + '/invite?code={{ family_invitation.code }}';
+                const currentUrl = window.location.origin + '/invite/{{ family_invitation.code }}';
                 // クリップボードにコピー
                 navigator.clipboard.writeText(currentUrl).then(function () {
                     alert('招待リンクをクリップボードにコピーしました');

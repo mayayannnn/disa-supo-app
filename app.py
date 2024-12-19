@@ -64,16 +64,15 @@ def family():
     if not user:
         return redirect(url_for('profile'))
     families = Family.select().where(Family.from_user == user.id)
-    families = Family.select().where(Family.from_user == 1)
-    family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == 1).first()
+    family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == user.id).first()
     if not family_invitation:
-        FamilyInvitation.create(invite_user=1, code=uuid.uuid4(), created_at=datetime.now())
+        FamilyInvitation.create(invite_user=user.id, code=uuid.uuid4(), created_at=datetime.now())
         db.commit()
         family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == 1).first()
     # 有効期限チェック - 作成から24時間経過している場合は再作成
     elif (datetime.now() - family_invitation.created_at).total_seconds() > 24 * 60 * 60:
         family_invitation.delete_instance()
-        FamilyInvitation.create(invite_user=1, code=uuid.uuid4(), created_at=datetime.now())
+        FamilyInvitation.create(invite_user=user.id, code=uuid.uuid4(), created_at=datetime.now())
         db.commit()
         family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == 1).first()
     return render_template("family.html", user=user, families=families, family_invitation=family_invitation)
@@ -81,19 +80,20 @@ def family():
 @app.route("/invite/<code>")
 def invite(code):
     line_id = session.get('line_id')
+    print(line_id)
     family_invitation = FamilyInvitation.select().where(FamilyInvitation.code == code).first()
     # 有効期限チェック - 作成から24時間経過している場合は無効
-    if family_invitation and (datetime.now() - family_invitation.created_at).total_seconds() > 24 * 60 * 60:
+    if family_invitation and (datetime.now() - family_invitation.created_at).total_seconds() < 24 * 60 * 60:
         # 招待した人のユーザー情報を取得
         invite_user = family_invitation.invite_user
         from_user = User.get(User.id == invite_user)        
         # 招待された人のユーザー情報を取得 (現在は仮のユーザーID=1を使用)
-        to_user = User.get(User.line_id == line_id)
+        to_user = User.select().where(User.line_id == line_id).first()
         # 家族として登録
         Family.create(from_user=from_user, to_user=to_user)
         return redirect("/family")
     else:
-        return redirect("/invalid_invite")
+        return redirect("/invalid-invite")
 
 @app.route("/invalid-invite")
 def invalid_invite():
@@ -156,8 +156,8 @@ def profile():
 def profile_save():
     liff_id = os.getenv("LIFF_ID")
     line_id = session.get('line_id')
-    user = User.select().where(User.line_id == line_id).first()
     line_id = request.form['lineId']
+    user = User.select().where(User.line_id == line_id).first()
     name    = request.form["name"]
     address  = request.form['address']
     birthday = request.form['birthday']
@@ -172,6 +172,7 @@ def profile_save():
         user.birthday = birthday
         user.gender   = gender
         user.save()
+        session['line_id'] = line_id
     return redirect("/profile")
 
 @app.route("/shelter/relief_supplies/login")
