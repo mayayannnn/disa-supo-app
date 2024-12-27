@@ -6,32 +6,22 @@ Q&A
 
 {% block top %}
 <p>
-    <div class="position-absolute top-50 start-50 translate-middle">
+  <div class="position-absolute top-50 start-50 translate-middle">
         <h1>よくある質問    </h1>
 
-        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#aiueo" aria-expanded="false" aria-controls="collapseWidthExample">
-            あいうえお
-          </button>
-        </p>
-        <div style="min-height: 100px;">
-          <div class="collapse collapse-horizontal" id="aiueo">
-            <div class="card card-body" style="width: 300px;">
-                This is "Test"
+        <div class="accordion" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                質問A
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <strong>頑張って考えてください</strong>
+              </div>
             </div>
           </div>
-        </div>
-
-        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
-            あいうえお
-          </button>
-        </p>
-        <div style="min-height: 100px;">
-          <div class="collapse collapse-horizontal" id="collapseWidthExample">
-            <div class="card card-body" style="width: 300px;">
-                This is "Test"
-            </div>
-          </div>
-        </div>
 
     </div>
 

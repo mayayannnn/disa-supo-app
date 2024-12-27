@@ -42,7 +42,7 @@ app.config["SESSION_COOKIE_HTTPONLY"] = True
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return redirect(url_for("info"))
 
 @app.route("/info")
 def info():
