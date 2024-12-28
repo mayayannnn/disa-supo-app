@@ -18,20 +18,37 @@ client = tweepy.Client(bearer_token=BEARER_TOKEN)
 def search_disaster_tweets_v2(keyword, count=10):
     try:
         # v2 APIで検索
-        response = client.search_recent_tweets(query=keyword, max_results=count, tweet_fields=["created_at", "text"])
+        response = client.search_recent_tweets(
+            query=keyword,
+            max_results=count,
+            tweet_fields=["created_at", "text"],
+            expansions=["author_id"],
+            user_fields=["username"]
+        )
+        
         tweets = response.data
+        users = {user["id"]: user["username"] for user in response.includes["users"]}
+        
         if tweets:
+            result = []
             for tweet in tweets:
-                print(f"Tweet ID: {tweet.id}")
-                print(f"Created at: {tweet.created_at}")
-                print(f"Text: {tweet.text}")
-                print("-" * 50)
+                username = users.get(tweet.author_id, "unknown_user")
+                tweet_url = f"https://twitter.com/{username}/status/{tweet.id}"
+                result.append({
+                    "tweet_id": tweet.id,
+                    "created_at": tweet.created_at,
+                    "text": tweet.text,
+                    "url": tweet_url
+                })
+            return result
         else:
             print("No tweets found.")
     except tweepy.TweepyException as e:
         print(f"Tweepy Error: {e}")
+        return []
     except Exception as e:
         print(f"Unexpected Error: {e}")
+        return []
 
 # 災害に関するキーワードで検索
-search_disaster_tweets_v2("災害 OR 地震 OR 津波", count=10)
+# print(search_disaster_tweets_v2("災害 OR 地震 OR 津波", count=10))

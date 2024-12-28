@@ -9,6 +9,24 @@ info
 
 
 
-{{  iwate_bousai.content }}
-<iframe width="560" height="315" src="https://www.youtube.com/embed/c7_kqMFDE8c?si=5PXHbb_W6oqwhuDy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+{{ iwate_bousai.content }}
+
+<hr>
+
+<h1>X (SNS)</h1>
+{% if x_tweets %}
+{% for tweet in x_tweets %}
+<p>{{ tweet.text }}</p>
+<p>{{ tweet.url }}</p>
+{% endfor %}
+{% else %}
+<p>ツイートがありません</p>
+{% endif %}
+
+<hr>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/c7_kqMFDE8c?si=5PXHbb_W6oqwhuDy"
+    title="YouTube video player" frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 {% endblock %}

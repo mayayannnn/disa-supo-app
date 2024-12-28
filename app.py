@@ -3,6 +3,7 @@ import uuid
 from datetime import datetime
 
 from info import scrape_iwate_bousai
+from x_tweepy import search_disaster_tweets_v2
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -53,7 +54,9 @@ def info():
     if not user:
         return redirect(url_for('profile'))
     iwate_bousai = scrape_iwate_bousai()
-    return render_template("info.html",iwate_bousai=iwate_bousai)
+    x_tweets = []
+    # x_tweets = search_disaster_tweets_v2("災害 OR 地震 OR 津波", count=10)
+    return render_template("info.html",iwate_bousai=iwate_bousai, x_tweets=x_tweets)
 
 @app.route("/family")
 def family():
