@@ -10,7 +10,7 @@ from flask import request
 from flask import redirect
 from flask import url_for
 from flask import session
-
+from flask import jsonify
 from dotenv import load_dotenv
 
 from database import db
@@ -130,7 +130,8 @@ def map():
         "map.html",
         shelters=shelters,
         hospitals=hospitals,
-        pharmacies=pharmacies
+        pharmacies=pharmacies,
+        user_id=user.id
     )
 
 @app.route("/shelter_list")
@@ -189,6 +190,15 @@ def relief_supplies_top():
 @app.route("/qa")
 def qa():
     return render_template("qa.html")
+
+@app.route("/register_position", methods=['POST'])
+def register_position():
+    data = request.json
+    latitude = data['latitude']
+    longitude = data['longitude']
+    user_id = data['user_id']
+    UserPosition.create(user_id=user_id, Latitude=latitude, Longitude=longitude)
+    return jsonify({'status': 'success'})
 
 if os.getenv("ENV") == "development":
     app.run(host="0.0.0.0", port=5001, ssl_context=('ssl/cert.pem', 'ssl/private.key'),debug=True)
