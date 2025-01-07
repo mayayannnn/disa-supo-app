@@ -33,3 +33,36 @@ def scrape_iwate_bousai():
         return result
     else:
         return {"error": f"Failed to retrieve the webpage. Status code: {response.status_code}"}
+    
+def scrape_terebi_saigai():
+    url = "https://www.tvi.jp/weather/disaster"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    results = soup.find_all("td")
+    # contents = []
+    # tables = soup.find_all('table')
+    # result = {}
+    # for table in tables:
+    #     ths = table.find_all("th")
+    #     lists = table.find_all("li")
+    #     for th in ths:
+    #         title = th.get_text()
+    #     for list in lists:
+    #         content = list.get_text()
+    #     result[title] = content
+    #     contents.append(content)
+    # print(result)
+    # # print(ths)
+    # # print(lists)
+    # # count = 0
+
+    # # result["タイトル"] = "水警報"
+    # # # for th in ths:
+    # # #     count = count + 1
+    # # #     result[th] = lists[count]
+    # # # return result
+    
+    
+
+    # # # result[list.get_th()] = list.get_text()
+    return results

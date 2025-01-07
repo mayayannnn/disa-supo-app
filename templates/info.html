@@ -6,9 +6,11 @@ info
 
 {% block top %}
 <h1>{{ iwate_bousai.title }}</h1>
-
-
-
 {{  iwate_bousai.content }}
-<iframe width="560" height="315" src="https://www.youtube.com/embed/c7_kqMFDE8c?si=5PXHbb_W6oqwhuDy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+{% for result in terebi.results %}
+<li>{{ result }}</li>
+{% endfor %}
+
+<!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/c7_kqMFDE8c?si=5PXHbb_W6oqwhuDy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
 {% endblock %}

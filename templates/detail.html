@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}
+detail
+{% endblock %}
+
+{% block top %}
+<ul class="list-group">
+    <li class="list-group-item"><h2>{{ shelter.name }}</h2></li>
+    <li class="list-group-item">カテゴリ:{{ shelter.category }}<br>電話番号:{{ shelter.phone_number }}</li>
+    <li class="list-group-item"><h5>物資状況</h5></li>
+    {% for reliefsuppli in reliefsupplies %}
+    <li class="list-group-item">{{ reliefsuppli.reliefsuppliescategory_id }}<br>残りの数:{{ reliefsuppli.required_number  - reliefsuppli.used_number}}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -78,7 +78,11 @@ family
             <tr>
                 <td>{{ family.to_user.name }}</td>
                 <td>
-                    <button class="btn btn-danger">削除</button>
+                    <form action="/family/del/{{ family.id }}" method="post">
+                        <input type="hidden" name="id" value="{{ family.id }}">
+                        <input class="btn btn-danger"  type="submit" value="削除">
+                    </form>
+
                 </td>
             </tr>
             {% endfor %}

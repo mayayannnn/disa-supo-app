@@ -2,7 +2,7 @@ import os
 import uuid
 from datetime import datetime
 
-from info import scrape_iwate_bousai
+from info import scrape_iwate_bousai,scrape_terebi_saigai
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -44,6 +44,12 @@ app.config["SESSION_COOKIE_HTTPONLY"] = True
 def index():
     return redirect(url_for("info"))
 
+@app.route("/detail/<id>")
+def detail(id):
+    shelter = Shelter.get(Shelter.id == id)
+    reliefsupplies = ReliefSupplies.select().where(ReliefSupplies.shelter_id == id)
+    return render_template("/detail.html",shelter=shelter,reliefsupplies=reliefsupplies)
+
 @app.route("/info")
 def info():
     line_id = session.get('line_id')
@@ -53,10 +59,12 @@ def info():
     if not user:
         return redirect(url_for('profile'))
     iwate_bousai = scrape_iwate_bousai()
-    return render_template("info.html",iwate_bousai=iwate_bousai)
+    terebi = scrape_terebi_saigai()
+    return render_template("info.html",iwate_bousai=iwate_bousai,terebi=terebi)
 
 @app.route("/family")
 def family():
+    #ユーザーポジションを登録
     line_id = session.get('line_id')
     user = None
     if line_id:
@@ -76,6 +84,12 @@ def family():
         db.commit()
         family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == 1).first()
     return render_template("family.html", user=user, families=families, family_invitation=family_invitation)
+
+@app.route("/family/del/<id>", methods=['POST'])
+def family_dele(id):
+    family = Family.get(Family.id == id)
+    family.delete_instance()
+    return redirect("/family")
 
 @app.route("/invite/<code>")
 def invite(code):
