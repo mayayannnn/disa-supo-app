@@ -65,4 +65,7 @@ def scrape_terebi_saigai():
     
 
     # # # result[list.get_th()] = list.get_text()
+    print(results)
     return results
+
+scrape_terebi_saigai()
