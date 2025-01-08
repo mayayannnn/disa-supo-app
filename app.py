@@ -3,13 +3,14 @@ import uuid
 from datetime import datetime
 
 from info import scrape_iwate_bousai,scrape_terebi_saigai
+from x_tweepy import search_disaster_tweets_v2
 from flask import Flask
 from flask import render_template
 from flask import request
 from flask import redirect
 from flask import url_for
 from flask import session
-
+from flask import jsonify
 from dotenv import load_dotenv
 
 from database import db
@@ -60,7 +61,8 @@ def info():
         return redirect(url_for('profile'))
     iwate_bousai = scrape_iwate_bousai()
     terebi = scrape_terebi_saigai()
-    return render_template("info.html",iwate_bousai=iwate_bousai,terebi=terebi)
+    x_tweets = search_disaster_tweets_v2("災害 OR 地震 OR 津波", count=10)
+    return render_template("info.html",iwate_bousai=iwate_bousai, x_tweets=x_tweets,terebi=terebi)
 
 @app.route("/family")
 def family():
@@ -141,7 +143,8 @@ def map():
         "map.html",
         shelters=shelters,
         hospitals=hospitals,
-        pharmacies=pharmacies
+        pharmacies=pharmacies,
+        user_id=user.id
     )
 
 @app.route("/shelter_list")
@@ -200,6 +203,15 @@ def relief_supplies_top():
 @app.route("/qa")
 def qa():
     return render_template("qa.html")
+
+@app.route("/register_position", methods=['POST'])
+def register_position():
+    data = request.json
+    latitude = data['latitude']
+    longitude = data['longitude']
+    user_id = data['user_id']
+    UserPosition.create(user_id=user_id, Latitude=latitude, Longitude=longitude)
+    return jsonify({'status': 'success'})
 
 if os.getenv("ENV") == "development":
     app.run(host="0.0.0.0", port=5001, ssl_context=('ssl/cert.pem', 'ssl/private.key'),debug=True)

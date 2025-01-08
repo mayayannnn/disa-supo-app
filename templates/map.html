@@ -53,9 +53,19 @@ map
         const myPosition = position;
         myLatitude = myPosition[0];
         myLongitude = myPosition[1];
-
-        
-
+        fetch("/register_position", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(
+                {
+                    user_id: "{{ user_id }}",
+                    latitude: myLatitude,
+                    longitude: myLongitude
+                }
+            )
+        });
         moriokaLatitude = 39.70196447156899;
         moriokaLongitude = 141.13575319162757;
         var distances = []
