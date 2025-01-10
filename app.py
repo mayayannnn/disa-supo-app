@@ -3,7 +3,6 @@ import uuid
 from datetime import datetime
 
 from info import scrape_iwate_bousai,scrape_terebi_saigai
-from x_tweepy import search_disaster_tweets_v2
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -61,8 +60,9 @@ def info():
         return redirect(url_for('profile'))
     iwate_bousai = scrape_iwate_bousai()
     terebi = scrape_terebi_saigai()
-    x_tweets = search_disaster_tweets_v2("災害 OR 地震 OR 津波", count=10)
-    return render_template("info.html",iwate_bousai=iwate_bousai, x_tweets=x_tweets,terebi=terebi)
+    print(terebi)
+    # x_tweets = search_disaster_tweets_v2("災害 OR 地震 OR 津波", count=10)
+    return render_template("info.html",iwate_bousai=iwate_bousai,terebi=terebi)
 
 @app.route("/family")
 def family():
@@ -167,6 +167,7 @@ def profile():
     user = None
     if line_id:
         user = User.select().where(User.line_id == line_id).first()
+    print("IDです" + str(line_id))
     return render_template("profile.html", liff_id=liff_id, user=user)
 
 @app.route("/profile/save", methods=['POST'])

@@ -8,16 +8,25 @@ info
 <h1>{{ iwate_bousai.title }}</h1>
 {{  iwate_bousai.content }}
 
-{% for result in terebi.results %}
-<li>{{ result }}</li>
-{% endfor %}
+<div class="accordion" id="accordionExampleOne">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            注意報
+        </button>
+      </h2>
+      
+{% for result in terebi %}
+      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExampleOne">
+        <div class="accordion-body">
+          <strong>{{ result }}</strong>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 
-<!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/c7_kqMFDE8c?si=5PXHbb_W6oqwhuDy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
-{% endblock %}
 
-
-
-{{ iwate_bousai.content }}
 
 <hr>
 
