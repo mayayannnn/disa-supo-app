@@ -7,10 +7,6 @@ shelter_list
 {% block top %}
 
 
-<h2>物資の情報</h2>
-{% if not relief_supplies: %}
-<p>結果はありません</p>
-{% else %}
   <div class="container mt-4">
     <h1 class="mb-4">Relief Supplies List</h1>
 <form action="/shelter_list">
@@ -45,6 +41,5 @@ shelter_list
 
 
 </table>
-{% endif %}
 
 {% endblock %}
