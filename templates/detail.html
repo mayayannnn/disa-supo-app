@@ -5,6 +5,7 @@ detail
 {% endblock %}
 
 {% block top %}
+<div class="container mt-4">
 <ul class="list-group">
     <li class="list-group-item"><h2>{{ shelter.name }}</h2></li>
     <li class="list-group-item">カテゴリ:{{ shelter.category }}<br>電話番号:{{ shelter.phone_number }}</li>
@@ -13,5 +14,5 @@ detail
     <li class="list-group-item">{{ reliefsuppli.reliefsuppliescategory_id }}<br>残りの数:{{ reliefsuppli.required_number  - reliefsuppli.used_number}}</li>
     {% endfor %}
 </ul>
-
+</div>
 {% endblock %}

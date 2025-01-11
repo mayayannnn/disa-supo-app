@@ -5,41 +5,46 @@ shelter_list
 {% endblock %}
 
 {% block top %}
-<h1>物資検索</h1>
-<form action="/shelter_list">
-    <input type="search" name="search" id="search">
-    <input type="submit" value="検索">
-</form>
+
 
 <h2>物資の情報</h2>
 {% if not relief_supplies: %}
 <p>結果はありません</p>
 {% else %}
-<ul class="list-group">
+  <div class="container mt-4">
+    <h1 class="mb-4">Relief Supplies List</h1>
+<form action="/shelter_list">
 
-    <table class="table">
+  <div class="input-group">
+    <input type="search" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+    <input type="submit"  class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04"></input>
+  </div>
+</form>
+
+    <table class="table table-striped">
         <thead>
-          <tr>
-            <th scope="col">名前</th>
-            <th scope="col">物資名</th>
-            <th scope="col">全体の数</th>
-            <th scope="col">あまりの数</th>
-          </tr>
+            <tr>
+                <th>名前</th>
+                <th>物資名</th>
+                <th>全体の数</th>
+                <th>あまりの数</th>
+            </tr>
         </thead>
-
         <tbody>
+          {% for relief_suppliy in relief_supplies %}
+          <tr>
+            <th scope="row"><a href="/detail/{{ relief_suppliy.shelter.id }}">{{ relief_suppliy.shelter.name }}</a></th>
+            <td>{{ relief_suppliy.reliefsuppliescategory.name }}</td>
+            <td>{{ relief_suppliy.required_number }}</td>
+            <td>{{ relief_suppliy.required_number - relief_suppliy.used_number }}</td>
+          </tr>
+      {% endfor %}
+        </tbody>
+    </table>
+</div>
 
-    {% for relief_suppliy in relief_supplies %}
-    <tr>
-      <th scope="row">{{ relief_suppliy.shelter.name }}</th>
-      <td>{{ relief_suppliy.reliefsuppliescategory.name }}</td>
-      <td>{{ relief_suppliy.required_number }}</td>
-      <td>{{ relief_suppliy.required_number - relief_suppliy.used_number }}</td>
-    </tr>
-{% endfor %}
-</tbody>
+
 </table>
-</ul>
 {% endif %}
 
 {% endblock %}

@@ -45,9 +45,11 @@ family
     }).addTo(map);
 
     // マーカーを追加
-    var marker = L.marker([39.741342617756274, 141.14154878158686]).addTo(map)
-        .bindPopup('黒石野中学校')
+    {% for family in families %}
+    var marker = L.marker([{{ pharmacy.Latitude }}, {{ pharmacy.Longitude }}]).addTo(map)
+        .bindPopup("家族")
         .openPopup();
+    {% endfor %}
 </script>
 <div class="container mt-4">
     <div class="text-center">

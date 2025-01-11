@@ -70,7 +70,23 @@ map
         moriokaLongitude = 141.13575319162757;
         var distances = []
         {% for shelter in shelters %}
+
+
+        // const R = Math.PI / 180;
+
+        // function dis(lat1, lng1, lat2, lng2) {
+        //   lat1 *= R;
+        //   lng1 *= R;
+        //   lat2 *= R;
+        //   lng2 *= R;
+        //   return 6371 * Math.acos(Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1) + Math.sin(lat1) * Math.sin(lat2));
+        // }
+
         distance = Math.sqrt(({{shelter.Latitude}} - moriokaLatitude) ** 2 + ({{shelter.Longitude}} - moriokaLongitude) ** 2);
+        // distance = dis(shelter.Latitude,shelter.Longitude,moriokaLatitude,moriokaLongitude)
+        
+        
+        
         console.log(distance);
         // 避難所名と距離を配列に保存
         distances.push({
