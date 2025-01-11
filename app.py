@@ -47,7 +47,7 @@ def index():
 @app.route("/detail/<id>")
 def detail(id):
     shelter = Shelter.get(Shelter.id == id)
-    reliefsupplies = ReliefSupplies.select().where(ReliefSupplies.shelter_id == id)
+    reliefsupplies = ReliefSupplies.select(ReliefSupplies,ReliefSuppliesCategory).join(ReliefSuppliesCategory,on=ReliefSupplies.reliefsuppliescategory_id == ReliefSuppliesCategory.id).where(ReliefSupplies.shelter_id == id)
     return render_template("/detail.html",shelter=shelter,reliefsupplies=reliefsupplies)
 
 @app.route("/info")

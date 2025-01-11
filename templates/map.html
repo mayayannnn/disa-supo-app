@@ -14,16 +14,19 @@ map
     }
 </style>
 <div id="map"></div>
-避難所一覧
-<ul id="distances">
+<div class="container mt-4">
+<ul class="list-group" id="distances">
+    <li class="list-group-item active" aria-current="true">避難所一覧</li>
 </ul>
-病院一覧
-<ul id="hospital_distances">
+<hr>
+<ul class="list-group" id="hospital_distances">
+    <li class="list-group-item active" aria-current="true">病院一覧</li>
 </ul>
-薬局一覧
-<ul id="pharmacy_distances">
+<hr>
+<ul class="list-group" id="pharmacy_distances">
+    <li class="list-group-item active" aria-current="true">薬局一覧</li>
 </ul>
-
+</div>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script>
     // 現在位置を取得する関数
@@ -90,6 +93,7 @@ map
                 link.href = "/detail/" + shelter.id
                 var li = document.createElement("li");
                 li.appendChild(link);
+                li.classList.add("list-group-item")
                 document.getElementById("distances").appendChild(li);
             });
         }
@@ -110,6 +114,7 @@ map
             hospital_distances.forEach(shelter => {
                 var li = document.createElement("li");
                 li.textContent = shelter.name + ": " + shelter.distance * 110 + "km";
+                li.classList.add("list-group-item")
                 document.getElementById("hospital_distances").appendChild(li);
             });
         }
@@ -131,6 +136,7 @@ map
             pharmacy_distances.forEach(shelter => {
                 var li = document.createElement("li");
                 li.textContent = shelter.name + ": " + shelter.distance * 110 + "km";
+                li.classList.add("list-group-item")
                 document.getElementById("pharmacy_distances").appendChild(li);
             });
         }

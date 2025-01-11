@@ -11,7 +11,7 @@ detail
     <li class="list-group-item">カテゴリ:{{ shelter.category }}<br>電話番号:{{ shelter.phone_number }}</li>
     <li class="list-group-item"><h5>物資状況</h5></li>
     {% for reliefsuppli in reliefsupplies %}
-    <li class="list-group-item">{{ reliefsuppli.reliefsuppliescategory_id }}<br>残りの数:{{ reliefsuppli.required_number  - reliefsuppli.used_number}}</li>
+    <li class="list-group-item">{{ reliefsuppli.reliefsuppliescategory.name }}<br>残りの数:{{ reliefsuppli.required_number  - reliefsuppli.used_number}}</li>
     {% endfor %}
 </ul>
 </div>
