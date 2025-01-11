@@ -73,7 +73,7 @@ def family():
         user = User.select().where(User.line_id == line_id).first()
     if not user:
         return redirect(url_for('profile'))
-    families = Family.select().where(Family.from_user == user.id)
+    families = Family.select(Family,User,UserPosition).join(User,on=Family.to_user == User.id).switch(User).join(UserPosition,on=User.id == UserPosition.user_id).where(Family.from_user == user.id)
     family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == user.id).first()
     if not family_invitation:
         FamilyInvitation.create(invite_user=user.id, code=uuid.uuid4(), created_at=datetime.now())
@@ -167,7 +167,6 @@ def profile():
     user = None
     if line_id:
         user = User.select().where(User.line_id == line_id).first()
-    print("IDです" + str(line_id))
     return render_template("profile.html", liff_id=liff_id, user=user)
 
 @app.route("/profile/save", methods=['POST'])

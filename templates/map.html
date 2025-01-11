@@ -88,13 +88,13 @@ map
                 }
             )
         });
-        moriokaLatitude = 39.70196447156899;
-        moriokaLongitude = 141.13575319162757;
+        // moriokaLatitude = 39.70196447156899;
+        // moriokaLongitude = 141.13575319162757;
         var distances = []
         {% for shelter in shelters %}
 
         // distance = Math.sqrt(({{shelter.Latitude}} - moriokaLatitude) ** 2 + ({{shelter.Longitude}} - moriokaLongitude) ** 2);
-        distance = getDistanceFromLatLon({{ shelter.Latitude }}, {{ shelter.Longitude }}, moriokaLatitude, moriokaLongitude);
+        distance = getDistanceFromLatLon({{ shelter.Latitude }}, {{ shelter.Longitude }}, myLatitude, myLongitude);
 
         // console.log(distance);
         // 避難所名と距離を配列に保存
@@ -109,7 +109,7 @@ map
             distances.sort((a, b) => a.distance - b.distance);
             distances.forEach(shelter => {
                 var link = document.createElement("a")
-                link.textContent = shelter.name + ": " + shelter.distance * 110 + "km";
+                link.textContent = shelter.name + ": " + shelter.distance.toFixed(2) + "km";
                 link.href = "/detail/" + shelter.id
                 var li = document.createElement("li");
                 li.appendChild(link);
@@ -121,7 +121,7 @@ map
         var hospital_distances = []
         {% for hospital in hospitals %}
         // distance = Math.sqrt(({{hospital.Latitude}} - moriokaLatitude) ** 2 + ({{hospital.Longitude}} - moriokaLongitude) ** 2);
-        distance = getDistanceFromLatLon({{ hospital.Latitude }}, {{ hospital.Longitude }}, moriokaLatitude, moriokaLongitude);
+        distance = getDistanceFromLatLon({{ hospital.Latitude }}, {{ hospital.Longitude }}, myLatitude, myLongitude);
         console.log(distance);
         // 避難所名と距離を配列に保存
         hospital_distances.push({
@@ -134,7 +134,7 @@ map
             hospital_distances.sort((a, b) => a.distance - b.distance);
             hospital_distances.forEach(shelter => {
                 var li = document.createElement("li");
-                li.textContent = shelter.name + ": " + shelter.distance * 110 + "km";
+                li.textContent = shelter.name + ": " + shelter.distance.toFixed(2) + "km";
                 li.classList.add("list-group-item")
                 document.getElementById("hospital_distances").appendChild(li);
             });
@@ -144,7 +144,7 @@ map
         var pharmacy_distances = []
         {% for pharmacy in pharmacies %}
         // distance = Math.sqrt(({{pharmacy.Latitude}} - moriokaLatitude) ** 2 + ({{pharmacy.Longitude}} - moriokaLongitude) ** 2);
-        distance = getDistanceFromLatLon({{ pharmacy.Latitude }}, {{ pharmacy.Longitude }}, moriokaLatitude, moriokaLongitude);
+        distance = getDistanceFromLatLon({{ pharmacy.Latitude }}, {{ pharmacy.Longitude }}, myLatitude, myLongitude);
         console.log(distance);
         // 避難所名と距離を配列に保存
         pharmacy_distances.push({
@@ -157,7 +157,7 @@ map
             pharmacy_distances.sort((a, b) => a.distance - b.distance);
             pharmacy_distances.forEach(shelter => {
                 var li = document.createElement("li");
-                li.textContent = shelter.name + ": " + shelter.distance * 110 + "km";
+                li.textContent = shelter.name + ": " + shelter.distance.toFixed(2) + "km";
                 li.classList.add("list-group-item")
                 document.getElementById("pharmacy_distances").appendChild(li);
             });

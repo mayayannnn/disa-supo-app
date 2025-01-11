@@ -43,5 +43,3 @@ def scrape_terebi_saigai():
     for td in tds:
         results.append(td.get_text())
     return results
-
-scrape_terebi_saigai()
