@@ -71,25 +71,12 @@ map
         var distances = []
         {% for shelter in shelters %}
 
-
-        // const R = Math.PI / 180;
-
-        // function dis(lat1, lng1, lat2, lng2) {
-        //   lat1 *= R;
-        //   lng1 *= R;
-        //   lat2 *= R;
-        //   lng2 *= R;
-        //   return 6371 * Math.acos(Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1) + Math.sin(lat1) * Math.sin(lat2));
-        // }
-
         distance = Math.sqrt(({{shelter.Latitude}} - moriokaLatitude) ** 2 + ({{shelter.Longitude}} - moriokaLongitude) ** 2);
-        // distance = dis(shelter.Latitude,shelter.Longitude,moriokaLatitude,moriokaLongitude)
-        
-        
-        
-        console.log(distance);
+
+        // console.log(distance);
         // 避難所名と距離を配列に保存
         distances.push({
+            id: "{{ shelter.id }}",
             name: "{{shelter.name}}",
             distance: distance
         });
@@ -98,8 +85,11 @@ map
         if (distances.length === {{ shelters | length }}) {
             distances.sort((a, b) => a.distance - b.distance);
             distances.forEach(shelter => {
+                var link = document.createElement("a")
+                link.textContent = shelter.name + ": " + shelter.distance * 110 + "km";
+                link.href = "/detail/" + shelter.id
                 var li = document.createElement("li");
-                li.textContent = shelter.name + ": " + shelter.distance * 110 + "km";
+                li.appendChild(link);
                 document.getElementById("distances").appendChild(li);
             });
         }
