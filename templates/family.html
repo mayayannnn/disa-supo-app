@@ -68,12 +68,12 @@ family
             popupAnchor: [1, -34],
             shadowSize: [41, 41]
         }));
-        {% for family in families %}
+    {% for family in families %}
         var marker = L.marker([{{ family.Latitude }}, {{ family.Longitude }} ]).addTo(map)
         .bindPopup("家族")
         .openPopup();
     marker.setIcon(L.icon({
-        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png",
+        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
         shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
         iconSize: [25, 41],
         iconAnchor: [12, 41],
@@ -84,7 +84,6 @@ family
     
     });
 </script>
-
 <div class="container mt-4">
     <div class="text-center">
         <button id="inviteBtn" class="btn btn-primary mb-3">招待リンク</button>

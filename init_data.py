@@ -3,6 +3,9 @@ from database import User
 from database import Shelter
 from database import Hospital
 from database import Pharmacy
+from database import ReliefSupplies
+from database import ReliefSuppliesCategory
+
 
 def init_shelter_data():
     shelters = [
@@ -100,3 +103,41 @@ def init_pharmacy_data():
     # データベースに登録
     for pharmacy in pharmacies:
         Pharmacy.create(**pharmacy)
+
+def init_reliefsupplies_data():
+    reliefsupplies = [
+        {
+            "shelter_id":1,
+            "reliefsuppliescategory_id":1,
+            "required_number":100,
+            "used_number":80
+        },
+                {
+            "shelter_id":1,
+            "reliefsuppliescategory_id":2,
+            "required_number":10,
+            "used_number":3
+        },
+                {
+            "shelter_id":2,
+            "reliefsuppliescategory_id":1,
+            "required_number":85,
+            "used_number":23
+        }
+
+    ]
+    for reliefsuppli in reliefsupplies:
+        Pharmacy.create(**reliefsuppli)
+
+def init_reliefsuppliescategory_date():
+    reliefsuppliescategories = [
+        {
+            "name" : "水"
+        },
+        {
+            "name" : "米"
+        }
+        
+    ]
+    for reliefsuppliescategory in reliefsuppliescategories:
+        Pharmacy.create(**reliefsuppliescategory)

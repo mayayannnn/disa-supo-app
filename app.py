@@ -37,6 +37,9 @@ if os.getenv("DB_INIT") == "init":
     # init_shelter_data()
     # init_hospital_data()
     # init_pharmacy_data()
+    # init_reliefsupplies_data()
+    # init_reliefsuppliescategory_date()
+
 
 app.secret_key = os.urandom(24)
 app.config["SESSION_COOKIE_HTTPONLY"] = True
@@ -92,7 +95,6 @@ def family():
             .select(User, UserPosition)
             .join(UserPosition, JOIN.LEFT_OUTER, on=(UserPosition.user == User.id))
             .where(User.id.in_(union_subquery)))
-    print(families)
     family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == user.id).first()
     if not family_invitation:
         FamilyInvitation.create(invite_user=user.id, code=uuid.uuid4(), created_at=datetime.now())
