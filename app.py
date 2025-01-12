@@ -111,10 +111,10 @@ def family():
         family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == 1).first()
     return render_template("family.html", user=user, families=families, family_invitation=family_invitation)
 
-@app.route("/family/del/<id>", methods=['POST'])
-def family_dele(id):
-    family = Family.get(Family.id == id)
-    family.delete_instance()
+@app.route("/family/del/<user_id>/<family_id>", methods=['POST'])
+def family_dele(user_id,family_id):
+    Family.delete().where(Family.from_user == user_id,Family.to_user == family_id).execute()
+    Family.delete().where(Family.from_user == family_id,Family.to_user == user_id).execute()
     return redirect("/family")
 
 @app.route("/invite/<code>")

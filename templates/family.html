@@ -107,8 +107,7 @@ family
             <tr>
                 <td>{{ family.name }}</td>
                 <td>
-                    <form action="/family/del/{{ family.id }}" method="post">
-                        <input type="hidden" name="id" value="{{ family.id }}">
+                    <form action="/family/del/{{ user.id }}/{{ family.id }}" method="post">
                         <input class="btn btn-danger" type="submit" value="削除">
                     </form>
 
