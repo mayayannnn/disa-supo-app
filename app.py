@@ -32,13 +32,13 @@ app = Flask(__name__)
 
 if os.getenv("DB_INIT") == "init":
     tables = [User, Family, Shelter, Hospital, Pharmacy, ReliefSuppliesCategory, ReliefSupplies, UserPosition, FamilyInvitation]
-    # db.drop_tables(tables)
-    # db.create_tables(tables)
-    # init_shelter_data()
-    # init_hospital_data()
-    # init_pharmacy_data()
-    # init_reliefsupplies_data()
-    # init_reliefsuppliescategory_date()
+    db.drop_tables(tables)
+    db.create_tables(tables)
+    init_shelter_data()
+    init_hospital_data()
+    init_pharmacy_data()
+    init_reliefsupplies_data()
+    init_reliefsuppliescategory_date()
 
 
 app.secret_key = os.urandom(24)
