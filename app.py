@@ -92,9 +92,12 @@ def family():
     union_subquery = subquery1.union_all(subquery2)
     # メインクエリ: User と UserPosition を結合
     families = (User
-            .select(User, UserPosition)
-            .join(UserPosition, JOIN.LEFT_OUTER, on=(UserPosition.user == User.id))
+            .select()
             .where(User.id.in_(union_subquery)))
+    for f in families:
+        user_position = UserPosition.select().where(UserPosition.user == f.id).order_by(UserPosition.id.desc()).first()
+        f.Latitude = user_position.Latitude
+        f.Longitude = user_position.Longitude
     family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == user.id).first()
     if not family_invitation:
         FamilyInvitation.create(invite_user=user.id, code=uuid.uuid4(), created_at=datetime.now())
