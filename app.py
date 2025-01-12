@@ -24,6 +24,8 @@ from database import UserPosition
 from database import FamilyInvitation
 from init_data import *
 
+from peewee import JOIN
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -73,8 +75,24 @@ def family():
         user = User.select().where(User.line_id == line_id).first()
     if not user:
         return redirect(url_for('profile'))
-    families = (Family .select(Family, User, UserPosition).join(User, on=(Family.to_user_id == User.id))
-                .join(UserPosition, on=(UserPosition.user == User.id)).where(Family.from_user == user.id))
+    # families = (Family .select(Family, User, UserPosition).join(User, on=(Family.to_user_id == User.id))
+    #             .join(UserPosition, on=(UserPosition.user == User.id)).where(Family.from_user == user.id))
+    # サブクエリ1: 自分が招待した人
+    subquery1 = (Family
+                .select(Family.to_user_id.alias('id'))
+                .where(Family.from_user_id == user.id))
+    # サブクエリ2: 自分を招待してくれた人
+    subquery2 = (Family
+                .select(Family.from_user_id.alias('id'))
+                .where(Family.to_user_id == user.id))
+    # UNION ALL でサブクエリを結合
+    union_subquery = subquery1.union_all(subquery2)
+    # メインクエリ: User と UserPosition を結合
+    families = (User
+            .select(User, UserPosition)
+            .join(UserPosition, JOIN.LEFT_OUTER, on=(UserPosition.user == User.id))
+            .where(User.id.in_(union_subquery)))
+    print(families)
     family_invitation = FamilyInvitation.select().where(FamilyInvitation.invite_user == user.id).first()
     if not family_invitation:
         FamilyInvitation.create(invite_user=user.id, code=uuid.uuid4(), created_at=datetime.now())
